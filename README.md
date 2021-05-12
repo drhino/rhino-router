@@ -13,7 +13,7 @@ This library provides an implementation of a regular expression based router in 
 <sup>Requires Node 12 or newer.</sup>
 
 ```shell
-npm i rhino-router
+npm install rhino-router
 ```
 ```javascript
 import RhinoRouter from 'rhino-router'
@@ -97,6 +97,7 @@ Regex       | Example             | Info
 `.*`        | `{route:.*}`        | Match everything.
 `[a-zA-Z]+` | `{myVar:[a-zA-Z]+}` | Match uppercase and lowercase A-z only.
 `[a-z-]+`   | `{title:[a-z-]+}`   | Match lowercase characters and a dash.
+`[a-z0-9-]+`| `{title:[a-z0-9-]+}`| Match lowercase, numeric and a dash.
 
 ## Examples
 - Browser Blog example
