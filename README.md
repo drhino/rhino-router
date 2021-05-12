@@ -107,5 +107,9 @@ Regex       | Example             | Info
 
 ---
 
+![Updated Badge](https://badges.pufler.dev/updated/drhino/rhino-router)
+![Created Badge](https://badges.pufler.dev/created/drhino/rhino-router)
+![Visits Badge](https://badges.pufler.dev/visits/drhino/rhino-router)
+
 ### Credits
 <sup>This library is based on the PHP router: [FastRoute](https://github.com/nikic/FastRoute)</sup>
