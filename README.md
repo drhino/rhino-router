@@ -98,6 +98,9 @@ Regex       | Example             | Info
 `[a-zA-Z]+` | `{myVar:[a-zA-Z]+}` | Match uppercase and lowercase A-z only.
 `[a-z-]+`   | `{title:[a-z-]+}`   | Match lowercase characters and a dash.
 `[a-z0-9-]+`| `{title:[a-z0-9-]+}`| Match lowercase, numeric and a dash.
+`en\|nl`    | `{lang:en\|nl}`     | Matches 'en' or 'nl'.
+`(en\|nl)`  | `{lang:(en\|nl)}`   | Same as above.
+`(?:en\|nl)`| `{lang:(?:en\|nl)}` | Same as above.
 
 ## Examples
 - Browser Blog example
