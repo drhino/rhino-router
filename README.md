@@ -95,7 +95,7 @@ Regex       | Example             | Info
 `[0-9]+`    | `{id:[0-9]+}`       | Matches numeric values only.
 `\d+`       | `{id:\\d+}`         | Same as above. Backslashes should be escaped.
 `.*`        | `{route:.*}`        | Match everything.
-`[a-zA-Z]+` | `{myVar:[a-zA-Z]+}` | Match uppercase and lowercase A-z only.
+`[a-zA-Z]+` | `{title:[a-zA-Z]+}` | Match uppercase and lowercase A-z only.
 `[a-z-]+`   | `{title:[a-z-]+}`   | Match lowercase characters and a dash.
 `[a-z0-9-]+`| `{title:[a-z0-9-]+}`| Match lowercase, numeric and a dash.
 `en\|nl`    | `{lang:en\|nl}`     | Matches 'en' or 'nl'.
