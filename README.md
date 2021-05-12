@@ -12,8 +12,6 @@ This library provides an implementation of a regular expression based router in 
 
 <sup>Requires Node 12 or newer.</sup>
 
-[![NPM](https://nodei.co/npm/rhino-router.png)](https://npmjs.com/package/rhino-router)
-
 ```shell
 npm i rhino-router
 ```
@@ -31,7 +29,7 @@ import RhinoRouter from 'https://cdn.jsdelivr.net/npm/rhino-router@2'
 
 ### Defining routes
 
-By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. The pattern of the placeholder can be adjusted by specifying e.g:  `{bar:[0-9]+}`. [View example route patterns.](#example-route-patterns)
+By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. The pattern of the placeholder can be adjusted by specifying e.g:  `{bar:[0-9]+}`.
 
 ```javascript
 const routes = [
@@ -50,7 +48,6 @@ const routes = [
   {
     // {id} must be a number (\d+)
     route: '/product/{id:\\d+}'
-    // `attr` is optional if you don't need it.
   }
 ]
 
