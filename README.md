@@ -34,20 +34,15 @@ By default the `route` key uses a syntax where `{foo}` specifies a placeholder w
 ```javascript
 const routes = [
   {
-    route: '/my/route',
-    // When a route matches, the value of `attr` is returned.
-    // Can be an Array, Object, Function, ...
-    attr: 'anything you want'
-  },
-  {
     route: '/blog/{category}/{article}',
-    attr: {
-      controller: 'BlogController'
-    }
+    
+    // When a route matches, the value of `attr` is returned.
+    // Can be an Array, Object, Function, ... or undefined.
+    attr: 'custom handler or attributes'
   },
   {
-    // {id} must be a number (\d+)
-    route: '/product/{id:\\d+}'
+    // {id} must be a number.
+    route: '/product/{id:[0-9]+}'
   }
 ]
 
@@ -64,13 +59,11 @@ The method: `.match(pathname)` returns an `Object` or `FALSE` when no matching r
  *
  * returns:
  * {
- *   attr: {
- *     controller: 'BlogController'
- *   },
  *   vars: {
  *     category: 'my-category',
  *     article: 'my-article'
- *   }
+ *   },
+ *   attr: 'custom handler or attributes'
  * }
  */
 const result = router.match('/blog/my-category/my-article')
@@ -78,12 +71,12 @@ const result = router.match('/blog/my-category/my-article')
 
 ```javascript
 /**
- * route: '/product/{id:\\d+}'
+ * route: '/product/{id:[0-9]+}'
  *
  * returns: false
- * => 'title' is not numeric.
+ * => {id}:'my-title' is not numeric.
  */
-const result = router.match('/product/title')
+const result = router.match('/product/my-title')
 ```
 
 ### Example route patterns
