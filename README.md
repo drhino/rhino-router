@@ -32,7 +32,7 @@ import RhinoRouter from 'https://cdn.jsdelivr.net/npm/rhino-router@2'
 
 ### Defining routes
 
-By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. You can adjust the pattern of the placeholder by specifying a custom pattern. e.g: `{bar:[0-9]+}`. [View example route patterns.](https://github.com/drhino/rhino-router#Example-route-patterns)
+By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. The pattern of the placeholder can be adjusted by specifying e.g:  `{bar:[0-9]+}`. [View example route patterns.](#example-route-patterns)
 
 ```javascript
 const routes = [
