@@ -3,31 +3,21 @@
 This library provides an implementation of a regular expression based router in ECMAScript.
 
 [![Node.js CI](https://github.com/drhino/rhino-router/actions/workflows/node.js.yml/badge.svg)](https://github.com/drhino/rhino-router/actions/workflows/node.js.yml)
-[![jsDelivr](https://badgen.net/jsdelivr/v/npm/rhino-router)](https://www.jsdelivr.com/package/npm/rhino-router)
-[![npm version](https://badge.fury.io/js/rhino-router.svg)](https://npmjs.com/package/rhino-router)
 [![MIT license](https://badgen.net/npm/license/rhino-router)](https://github.com/drhino/rhino-router/blob/main/LICENSE)
-
-[![...](https://badgen.net/npm/node/rhino-router)](#)
 [![...](https://badgen.net/npm/types/rhino-router)](#)
-[![...](https://badgen.net/npm/dependents/rhino-router)](#)
+[![npm version](https://badge.fury.io/js/rhino-router.svg)](https://npmjs.com/package/rhino-router)
+[![...](https://badgen.net/npm/node/rhino-router)](#)
+[![jsDelivr](https://badgen.net/jsdelivr/v/npm/rhino-router)](https://www.jsdelivr.com/package/npm/rhino-router)
 
 ## Install
-
-### NPM
 
 <sup>Requires Node 12 or newer.</sup>
 
 ```shell
 npm install rhino-router
 ```
-```javascript
-import { add, dispatch } from 'rhino-router'
-```
-
-### CDN
-
-```javascript
-import { add, dispatch } from 'https://cdn.jsdelivr.net/npm/rhino-router@3'
+```shell
+yarn add rhino-router
 ```
 
 ## Usage
@@ -37,6 +27,9 @@ import { add, dispatch } from 'https://cdn.jsdelivr.net/npm/rhino-router@3'
 By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. The pattern of the placeholder can be adjusted by specifying e.g:  `{bar:[0-9]+}`.
 
 ```javascript
+import { add, dispatch } from 'rhino-router'
+// import { add, dispatch } from 'https://cdn.jsdelivr.net/npm/rhino-router@3'
+
 add({
   route: '/blog/{category}/{article}',
     
@@ -49,6 +42,8 @@ add({
   // {id} must be a number.
   route: '/product/{id:[0-9]+}'
 })
+
+// console.log( dispatch('/product/99') )
 ```
 
 ### Matching routes
@@ -57,11 +52,12 @@ The method `dispatch(pathname)` returns an `Object` or `FALSE` when no matching 
 
 example:
 ```javascript
+// route: '/blog/{category}/{article}'
 const result = dispatch('/blog/my-category/my-article')
 ```
 returns:
 ```javascript
-const result = {
+{
   // The matching route pattern.
   route: '/blog/{category}/{article}',
 
@@ -71,7 +67,7 @@ const result = {
     article: 'my-article'
   },
 
-  // All your custom attributes.
+  // All custom attributes.
   attr1: 'custom handler',
   attr2: '... or attributes',
   // ...
@@ -82,16 +78,12 @@ const result = {
 }
 ```
 
-example:
+returns `FALSE`:
 ```javascript
 // route: '/product/{id:[0-9]+}'
 const result = dispatch('/product/my-title')
-```
-returns:
-```javascript
-const result = false
 
-// {id}:'my-title' is not a number.
+// Placeholder: "id" with value: "my-title" is not a number.
 ```
 
 ---
