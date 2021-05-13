@@ -21,13 +21,13 @@ This library provides an implementation of a regular expression based router in 
 npm install rhino-router
 ```
 ```javascript
-import RhinoRouter from 'rhino-router'
+import { add, dispatch } from 'rhino-router'
 ```
 
 ### CDN
 
 ```javascript
-import RhinoRouter from 'https://cdn.jsdelivr.net/npm/rhino-router@2'
+import { add, dispatch } from 'https://cdn.jsdelivr.net/npm/rhino-router@3'
 ```
 
 ## Usage
@@ -37,52 +37,64 @@ import RhinoRouter from 'https://cdn.jsdelivr.net/npm/rhino-router@2'
 By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. The pattern of the placeholder can be adjusted by specifying e.g:  `{bar:[0-9]+}`.
 
 ```javascript
-const routes = [
-  {
-    route: '/blog/{category}/{article}',
+add({
+  route: '/blog/{category}/{article}',
     
-    // When a route matches, the value of `attr` is returned.
-    // Can be an Array, Object, Function, ... or undefined.
-    attr: 'custom handler or attributes'
-  },
-  {
-    // {id} must be a number.
-    route: '/product/{id:[0-9]+}'
-  }
-]
+  // Add anything you want.
+  attr1: 'custom handler',
+  attr2: '... or attributes'
+})
 
-const router = new RhinoRouter(routes)
+add({
+  // {id} must be a number.
+  route: '/product/{id:[0-9]+}'
+})
 ```
 
 ### Matching routes
 
-The method: `.match(pathname)` returns an `Object` or `FALSE` when no matching route is found.
+The method `dispatch(pathname)` returns an `Object` or `FALSE` when no matching route is found.
 
+example:
 ```javascript
-/**
- * route: '/blog/{category}/{article}'
- *
- * returns:
- * {
- *   vars: {
- *     category: 'my-category',
- *     article: 'my-article'
- *   },
- *   attr: 'custom handler or attributes'
- * }
- */
-const result = router.match('/blog/my-category/my-article')
+const result = dispatch('/blog/my-category/my-article')
+```
+returns:
+```javascript
+const result = {
+  // The matching route pattern.
+  route: '/blog/{category}/{article}',
+
+  // The placeholders with their values.
+  vars: {
+    category: 'my-category',
+    article: 'my-article'
+  },
+
+  // All your custom attributes.
+  attr1: 'custom handler',
+  attr2: '... or attributes',
+  // ...
+
+  // Useful for debugging.
+  placeholders: ['category', 'article'],
+  pattern: '^/blog/([^/]+)/([^/]+)$'
+}
 ```
 
+example:
 ```javascript
-/**
- * route: '/product/{id:[0-9]+}'
- *
- * returns: false
- * => {id}:'my-title' is not numeric.
- */
-const result = router.match('/product/my-title')
+// route: '/product/{id:[0-9]+}'
+const result = dispatch('/product/my-title')
 ```
+returns:
+```javascript
+const result = false
+
+// {id}:'my-title' is not a number.
+```
+
+---
 
 ### Example route patterns
 
@@ -99,6 +111,8 @@ Regex       | Example             | Info
 `en\|nl`    | `{lang:en\|nl}`     | Matches 'en' or 'nl'.
 `(en\|nl)`  | `{lang:(en\|nl)}`   | Same as above.
 `(?:en\|nl)`| `{lang:(?:en\|nl)}` | Same as above.
+
+---
 
 ## Examples
 - Browser Blog example
