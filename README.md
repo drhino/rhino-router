@@ -3,8 +3,13 @@
 This library provides an implementation of a regular expression based router in ECMAScript.
 
 [![Node.js CI](https://github.com/drhino/rhino-router/actions/workflows/node.js.yml/badge.svg)](https://github.com/drhino/rhino-router/actions/workflows/node.js.yml)
-[![jsDelivr](https://data.jsdelivr.com/v1/package/npm/rhino-router/badge)](https://www.jsdelivr.com/package/npm/rhino-router)
+[![jsDelivr](https://badgen.net/jsdelivr/v/npm/rhino-router)](https://www.jsdelivr.com/package/npm/rhino-router)
 [![npm version](https://badge.fury.io/js/rhino-router.svg)](https://npmjs.com/package/rhino-router)
+[![MIT license](https://badgen.net/npm/license/rhino-router)](https://github.com/drhino/rhino-router/blob/main/LICENSE)
+
+[![...](https://badgen.net/npm/node/rhino-router)](#)
+[![...](https://badgen.net/npm/types/rhino-router)](#)
+[![...](https://badgen.net/npm/dependents/rhino-router)](#)
 
 ## Install
 
