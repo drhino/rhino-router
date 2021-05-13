@@ -1,7 +1,7 @@
 {
   "name": "rhino-router",
-  "version": "2.0.0",
-  "description": "",
+  "version": "3.0.0",
+  "description": "This library provides an implementation of a regular expression based router in ECMAScript.",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
