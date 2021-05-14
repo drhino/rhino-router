@@ -9,7 +9,7 @@ let routes = []
  * Adds a new route pattern.
  *
  * The `route` key is required.
- * The following keys are reserved: `pattern`, `placeholders`, `vars`.
+ * The `vars` key is reserved.
  *
  * @param {object} input { route: '/', ...(custom) }
  *
@@ -21,27 +21,22 @@ export const add = (input) =>
     if (typeof input.route === 'undefined')
         throw new Error('RR0100: Please add a route key to your input object.')
 
-    if (input.pattern)
-        throw new Error('RR0200: The key: "pattern" is already used by the router class.')
-
-    if (input.placeholders)
-        throw new Error('RR0201: The key: "placeholders" is already used by the router class.')
-
     if (input.vars)
-        throw new Error('RR0202: The key: "vars" is already used by the router class.')
+        throw new Error('RR0202: The key: "vars" is reserved by the router class.')
 
-    routes.push( { ...input, ..._parse(input.route) } )
+    routes.push( { input, ..._parse(input.route) } )
 }
 
 /**
  * Match route.
  *
  * @param {string} pathname Input to match with route pattern.
+ * @param {boolean} debug 
  *
- * @returns {object}  item  { route, pattern, placeholders, vars, ...(custom) }
+ * @returns {object} { route, vars, ...(custom) }
  * @returns {boolean} FALSE  No matching route found.
  */
-export const dispatch = (pathname) =>
+export const dispatch = (pathname, debug = false) =>
 {
     // Processes each route until a match is found.
     for (const item of routes) {
@@ -52,7 +47,7 @@ export const dispatch = (pathname) =>
         // Either an empty object (in the case of a fixed route pattern)
         // OR an object with the placeholders and their values was returned.
         if (false !== vars) {
-            return { ...item, vars }
+            return debug ? { ...item, vars } : { ...item.input, vars }
         }
     }
 
@@ -89,9 +84,7 @@ const _parse = (pattern) =>
 
         for (const match of matchAll) {
             // Uses the regex pattern in a capturing group.
-            // {varName:\d+}    -> (\d+)
             // {varName:[0-9]+} -> ([0-9]+)
-            // {varName:.*}     -> (.*)
             const rgx = '(' + (match[2] || DEFAULT_RGX) + ')'
 
             // Build regex.
