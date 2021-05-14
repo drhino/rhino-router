@@ -11,8 +11,6 @@ This library provides an implementation of a regular expression based router in 
 
 ## Install
 
-<sup>Requires Node 12 or newer.</sup>
-
 ```shell
 npm install rhino-router
 ```
@@ -24,18 +22,16 @@ yarn add rhino-router
 
 ### Defining routes
 
-By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. The pattern of the placeholder can be adjusted by specifying e.g:  `{bar:[0-9]+}`.
+Dynamic patterns use the syntax: `{myVar}` or `{myVar:regex}`
 
 ```javascript
 import { add, dispatch } from 'rhino-router'
-// import { add, dispatch } from 'https://cdn.jsdelivr.net/npm/rhino-router@3'
 
 add({
   route: '/blog/{category}/{article}',
     
   // Add anything you want.
-  attr1: 'custom handler',
-  attr2: '... or attributes'
+  something: 'custom handler or attributes'
 })
 
 add({
@@ -43,12 +39,21 @@ add({
   route: '/product/{id:[0-9]+}'
 })
 
-// console.log( dispatch('/product/99') )
+const result = dispatch('/product/99')
 ```
+
+By default the `route` key uses a syntax where `{foo}` specifies a placeholder with the name `foo` and matching the regex `[^/]+`. The pattern of the placeholder can be adjusted by specifying e.g:  `{bar:[0-9]+}`.
+
+This means that `{foo}` is exactly the same as `{foo:[^/]+}`.
+Please note that the colon `:` is not part of the regex.
+
+---
 
 ### Matching routes
 
 The method `dispatch(pathname)` returns an `Object` or `FALSE` when no matching route is found.
+
+The method `dispatch(pathname)` returns an `Object`. When no match is found, a `NotFoundException` is thrown.
 
 example:
 ```javascript
@@ -67,21 +72,16 @@ returns:
     article: 'my-article'
   },
 
-  // All custom attributes.
-  attr1: 'custom handler',
-  attr2: '... or attributes',
+  // Custom attributes.
+  something: 'custom handler or attributes'
   // ...
-
-  // Useful for debugging.
-  placeholders: ['category', 'article'],
-  pattern: '^/blog/([^/]+)/([^/]+)$'
 }
 ```
 
 returns `FALSE`:
 ```javascript
 // route: '/product/{id:[0-9]+}'
-const result = dispatch('/product/my-title')
+const result = dispatch('/product/Not-A-Number')
 
 // Placeholder: "id" with value: "my-title" is not a number.
 ```
@@ -95,7 +95,7 @@ Regex       | Example             | Info
 `[^/]+`     | `{myVar}`           | Default — Matches the value until the first found slash.
 `[^-]+`     | `{from:[^-]+}-{to}` | Anything until the first dash.
 `[0-9]+`    | `{id:[0-9]+}`       | Matches numeric values only.
-`\d+`       | `{id:\\d+}`         | Same as above. Backslashes should be escaped.
+`\d+`       | `{id:\\d+}`         | Same as above. Backslashes must be escaped.
 `.*`        | `{route:.*}`        | Match everything.
 `[a-zA-Z]+` | `{title:[a-zA-Z]+}` | Match uppercase and lowercase A-z only.
 `[a-z-]+`   | `{title:[a-z-]+}`   | Match lowercase characters and a dash.
