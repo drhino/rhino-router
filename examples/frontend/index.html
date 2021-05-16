@@ -1,0 +1,45 @@
+<header>
+  <h1>My Blog</h1>
+  <nav>
+    <ul>
+      <li>
+        <a data-handle href="/">Home</a>
+      </li>
+      <li>
+        <a data-handle href="/blog">Blog</a>
+      </li>
+      <li>
+        <a data-handle href="/404">404</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+  <!-- content -->
+</main>
+
+<script src="/examples/frontend/dist/bundle.min.js"></script>
+<script>
+
+  const id        = 'main'
+  const attribute = 'data-handle'
+  const prefix    = '/examples/frontend'
+
+  RhinoFrontend.init(id, attribute, prefix)
+
+</script>
+
+<!--
+<script type="module">
+
+  import { init } from '/examples/frontend/src/app.js'
+
+  const id        = 'main'
+  const attribute = 'data-handle'
+  const prefix    = '/examples/frontend'
+
+  init(id, attribute, prefix)
+
+</script>
+-->

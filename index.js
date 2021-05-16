@@ -18,11 +18,13 @@ let routes = []
  */
 export const add = (input) =>
 {
+    // Please add a route key to your input object.
     if (typeof input.route === 'undefined')
-        throw new Error('RR0100: Please add a route key to your input object.')
+        throw new Error('RR0100: `route` key required')
 
+    // The key: "vars" is reserved by the router class.
     if (input.vars)
-        throw new Error('RR0202: The key: "vars" is reserved by the router class.')
+        throw new Error('RR0202: do not use `vars` key')
 
     routes.push( { input, ..._parse(input.route) } )
 }
@@ -31,12 +33,11 @@ export const add = (input) =>
  * Match route.
  *
  * @param {string} pathname Input to match with route pattern.
- * @param {boolean} debug 
  *
  * @returns {object} { route, vars, ...(custom) }
  * @returns {boolean} FALSE  No matching route found.
  */
-export const dispatch = (pathname, debug = false) =>
+export const dispatch = (pathname) =>
 {
     // Processes each route until a match is found.
     for (const item of routes) {
@@ -47,7 +48,9 @@ export const dispatch = (pathname, debug = false) =>
         // Either an empty object (in the case of a fixed route pattern)
         // OR an object with the placeholders and their values was returned.
         if (false !== vars) {
-            return debug ? { ...item, vars } : { ...item.input, vars }
+            // Debug:
+            // return { ...item, vars }
+            return { ...item.input, vars }
         }
     }
 

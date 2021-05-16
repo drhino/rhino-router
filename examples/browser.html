@@ -1,0 +1,50 @@
+<!-- OPTION 1: expose RhinoRouter to global scope -->
+<!--
+<script src="../dist/bundle.min.js"></script>
+<script>
+
+    RhinoRouter.add({
+        route: '/blog/{article}'
+    })
+
+    console.log( RhinoRouter.dispatch('/blog/my-article') )
+
+</script>
+-->
+
+<!-- OPTION 2: expose RhinoRouter to global scope within a module -->
+<!--
+<script type="module">
+
+    import '../dist/bundle.min.js'
+
+    RhinoRouter.add({
+        route: '/blog/{article}'
+    })
+
+    console.log( RhinoRouter.dispatch('/blog/my-article') )
+
+</script>
+-->
+
+<!-- OPTION 3: use browser module -->
+<script type="module">
+    
+    import { add, dispatch } from '../dist/index.min.js'
+    // import { add, dispatch } from 'https://cdn.jsdelivr.net/npm/rhino-router@3'
+
+    add({
+        route: '/blog/{article}',
+        something: 'custom handler',
+        somethingElse: 'or attributes'
+    })
+
+    add({
+        // {id} must be a number.
+        route: '/product/{id:[0-9]+}'
+    })
+
+    console.log( dispatch('/blog/My-Article') )
+    console.log( dispatch('/product/99') )
+
+</script>

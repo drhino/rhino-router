@@ -4,14 +4,17 @@
   "description": "This library provides an implementation of a regular expression based router in ECMAScript.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "chmod u+x ./build.sh && ./build.sh"
   },
-  "keywords": [],
+  "keywords": ["router"],
   "author": "Gerd <gerdachternaam@gmail.com>",
-  "license": "MIT",
+  "license": "(ISC OR MIT)",
   "type": "module",
   "devDependencies": {
-    "mocha": "^8.4.0"
+    "mocha": "^8.4.0",
+    "rollup": "^2.48.0",
+    "terser": "^5.7.0"
   },
   "engines": {
     "node": ">=12"
