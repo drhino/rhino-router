@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "build": "chmod u+x ./build.sh && ./build.sh"
+    "build": "chmod u+x ./sh/build.sh && ./sh/build.sh"
   },
   "keywords": ["router"],
   "author": "Gerd <gerdachternaam@gmail.com>",

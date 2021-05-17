@@ -1,232 +1,100 @@
 import { equal } from 'assert'
-import RhinoRouter from '../index.js'
+import { add, dispatch } from '../dist/index.min.js'
 
-// { key [:regex] }
+// Route patterns.
 const routes = [
-  {
-    route: '/fixedRoutePart/{varName}/moreFixed/{varName2:[0-9]+}',
-    attr: {
-      mykey: 'any custom attributes',
-      other: 'values...'
-    }
-  },
-  {
-    route: '/my/route',
-    attr: {
-      controller: 'MyController'
-    }
-  },
-  {
-    route: '/my/{key}',
-    attr: 'Something'
-  },
-  {
-    route: '/prefix/{route:.*}',
-    attr: {
-      controller: 'ProxyController'
-    }
-  },
-  {
-    route: '/product/{id:\\d+}',
-    attr: {
-      controller: 'ProductController'
-    }
-  },
-  {
-    route: '/test/{key1}/{key2:\\d+}/{key3:[A-Z]+}/{key4}',
-    //attr: null
-  },
+    '/',
+    '/fixed/route/pattern',
+    // { key [:regex] }
+    '/blog/{category}/{article:[-0-9A-Za-z]+}',
+    '/flight/{from:[^-]+}-{to}',
+    '/{lang:en|nl}',
+    '/prefix/{route:.*}/suffix',
 ]
 
-const router = new RhinoRouter(routes)
-
-// ---
-
-const routes2 = [
-  '/static/route',
-  '/dynamic/route/{param}',
-  '/blog/{article:[a-zA-Z][a-zA-Z-]+}',
-  '/{mixed}/multiple/{params}',
+const shouldFail = [
+    '/way/too/long/and/undefined/should/not/work',
+    '/fixed/route/pattern/',        // Does not match trailing slash.
+    '/blog/my-category/my_article', // Pattern does not allow underscores.
+    '/flight/LAX',                  // No dash in URL.
+    '/fr',                          // Only 'en' or 'nl' allowed.
+    '/prefix/complete/path',        // Requires '/suffix' at the end.
 ]
 
-const router2 = new RhinoRouter(routes2)
+// Matches the index of ${routes} for the returned route pattern.
+const shouldWork = [
+    // The route key here is the input. The returned value is the route pattern.
+    // e.g:  input: '/blog/my-category', pattern: '/blog/{category}'.
+    // An empty object for `vars` is returned when a fixed pattern is used.
+    { route: '/', vars: {} },
+    { route: '/fixed/route/pattern', vars: {} },
+    { route: '/blog/my-category/my-article', 
+        vars: { category: 'my-category', article: 'my-article' } },
+    { route: '/flight/LAX-BRU', vars: { from: 'LAX', to: 'BRU' } },
+    { route: '/nl', vars: { lang: 'nl' } },
+    { route: '/prefix/complete/path/suffix', vars: { route: 'complete/path' } }
+]
 
-// ---
+// Dummy data to return for each `shouldWork` route.
+const returns = { something: 'handler', somethingElse: ['something'] }
 
-describe('Testing generated route query:', function() {
+// Add routes with dummy data to router.
+for (const route of routes) {
+    add({ ...returns, route })
+}
 
-  describe('Validating first input route only:', function() {
-    it('Should return a regex without the route keys.', function() {
-      equal(router.routes[0].route, '^/fixedRoutePart/([^/]+)/moreFixed/([0-9]+)$')
+/**
+ * Detects wether the input routes WORK as expected.
+ */
+describe('Valid routes:', function() {
+    it('Should return the route variables and custom attributes.', function() {
+        
+        let index = 0
+        
+        for (const route of shouldWork) {
+            const result = JSON.stringify( dispatch(route.route) )
+            const equals = JSON.stringify( { ...returns, route: routes[index], vars: route.vars } )
+
+            equal(result, equals)
+
+            index++
+        }
     })
-  })
-
 })
 
-describe('Testing route input:', function() {
-
-  describe('Valid routes:', function() {
-    it('Should return the parsed route variables and custom attributes.', function() {
-
-      const tests = [
-        {
-          route: '/fixedRoutePart/dynamicRoutePart/moreFixed/123',
-          result: {
-            vars: {
-              varName: 'dynamicRoutePart',
-              varName2: '123'
-            },
-            attr: {
-              mykey: 'any custom attributes',
-              other: 'values...'
-            }
-          }
-        },
-        {
-          route: '/my/route',
-          result: {
-            vars: {},
-            attr: { controller: 'MyController' }
-          }
-        },
-        {
-          route: '/my/route-2',
-          result: {
-            vars: { key: 'route-2' },
-            attr: 'Something'
-          }
-        },
-        {
-          route: '/prefix/my/custom/route',
-          result: {
-            vars: { route: 'my/custom/route' },
-            attr: { controller: 'ProxyController' }
-          }
-        },
-        {
-          route: '/product/99',
-          result: {
-            vars: { id: '99' },
-            attr: { controller: 'ProductController' }
-          }
-        },
-        {
-          route: '/test/val1/2/VALUE/val4',
-          result: {
-            vars: {
-              key1: 'val1',
-              key2: '2',
-              key3: 'VALUE',
-              key4: 'val4'
-            },
-            //attr: null
-          }
-        },
-      ]
-
-      for (const test of tests) {
-        equal(
-          JSON.stringify( router.match(test.route) ),
-          JSON.stringify( test.result )
-        )
-      }
-
-    })
-  })
-
-  describe('Invalid routes:', function() {
+/**
+ * Detects wether the input routes FAIL as expected.
+ */
+describe('Invalid routes', function() {
     it('Should return false when no matching route is found.', function() {
-
-      const shouldFail = [
-        '/test/val1/2/shouldFail/val4',
-        '/fixedRoutePart/dynamicRoutePart/moreFixed/shouldFail',
-        '/my2/shouldFail',
-        '/prefix-shouldFail/my/custom/route',
-        '/product/shouldFail',
-        '/product/',
-        '/shouldFail/route/which/is/way/too/long/to/be/found',
-      ]
-
-      for (const route of shouldFail) {
-        equal(router.match(route), false)
-      }
-
+        
+        for (const route of shouldFail) {
+            const result = dispatch(route)
+            equal(result, false)
+        }
     })
-  })
-
 })
 
-// ---
+/**
+ * @throws {Error}
+ */
+describe('Catch Error Exceptions RR0100 & RR0202.', function() {
 
-describe('Testing array of routes without attributes:', function() {
-
-  describe('Valid routes:', function() {
-    it('Should return the parsed route variables (if any).', function() {
-
-      const tests = [
-        {
-          route: '/static/route',
-          result: {
-            vars: {}
-          }
-        },
-        {
-          route: '/dynamic/route/myParam',
-          result: {
-            vars: { param: 'myParam' }
-          }
-        },
-        {
-          route: '/blog/my-article',
-          result: {
-            vars: { article: 'my-article' }
-          }
-        },
-        {
-          route: '/blog/My-Article',
-          result: {
-            vars: { article: 'My-Article' }
-          }
-        },
-        {
-          route: '/var1/multiple/var2',
-          result: {
-            vars: {
-              mixed: 'var1',
-              params: 'var2'
-            }
-          }
-        },
-      ]
-
-      for (const test of tests) {
-        equal(
-          JSON.stringify( router2.match(test.route) ),
-          JSON.stringify( test.result )
-        )
-      }
-
+    it('(RR0100) Should throw an Error when the `route` key is missing.', function() {
+        // The key `route` is required.
+        try {
+            add()
+        } catch (e) {
+            equal(e.message, 'RR0100: `route` key required')
+        }
     })
-  })
 
-  describe('Invalid routes:', function() {
-    it('Should return false when no matching route is found.', function() {
-      
-      const shouldFail = [
-        '/static/route2',
-        '/dynamic/route',
-        '/dynamic/route/',
-        '/blog/-invalid-article',
-        '/blog/invalid-article/',
-        '/mixed/multiple/params/too-much',
-        '/mixed/multiple/params/',
-      ]
-
-      for (const route of shouldFail) {
-        equal(router2.match(route), false)
-      }
-
+    it('(RR0202) Should throw an Error when the `vars` key is defined.', function() {
+        // The key `vars` should not be used.
+        try {
+            add({ route: '/', vars: {} })
+        } catch (e) {
+            equal(e.message, 'RR0202: do not use `vars` key')
+        }
     })
-  })
-
 })

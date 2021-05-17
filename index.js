@@ -19,7 +19,7 @@ let routes = []
 export const add = (input) =>
 {
     // Please add a route key to your input object.
-    if (typeof input.route === 'undefined')
+    if (!input || typeof input.route === 'undefined')
         throw new Error('RR0100: `route` key required')
 
     // The key: "vars" is reserved by the router class.
