@@ -1,0 +1,6 @@
+.github/
+dist/
+examples/
+sh/
+test/
+regex.md
