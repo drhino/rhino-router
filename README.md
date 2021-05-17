@@ -90,15 +90,16 @@ const result = dispatch('/product/Not-A-Number')
 
 ### Example route patterns
 
-Regex       | Example             | Info
-------------|---------------------|---------------------------------------------------------
-`[^/]+`     | `{myVar}`           | Default — Matches the value until the first found slash.
-`[^-]+`     | `{from:[^-]+}-{to}` | Anything until the first dash.
-`[0-9]+`    | `{id:[0-9]+}`       | Matches numeric values only.
-`.*`        | `{route:.*}`        | Match everything.
-`[A-z]+`    | `{title:[A-z]+}`    | Match uppercase and lowercase A-z.
-`[A-z0-9-]+`| `{title:[A-z0-9-]+}`| Match "A-z" & numeric & "-".
-`en\|nl\|fr`| `{lang:en\|nl\|fr}` | Matches 'en' or 'nl' or 'fr'.
+Regex             | Example                  | Info
+------------------|--------------------------|---------------------------------------------------------
+`[^/]+`           | `{myVar}`                | Default — Matches the value until the first found slash.
+`[^-]+`           | `{from:[^-]+}-{to}`      | Anything until the first dash.
+`[0-9]+`          | `{id:[0-9]+}`            | Matches numeric values only.
+`.*`              | `{route:.*}`             | Match everything.
+`[A-Za-z]+`       | `{title:[A-Za-z]+}`      | Match uppercase and lowercase a-z.
+`[-0-9A-Za-z]+`   | `{title:[-0-9A-Za-z]+}`  | Match e.g: "My-Article-1", not "My_Article_1".
+`[-.0-9A-Z_a-z]+` | `{file:[-.0-9A-Z_a-z]+}` | Matches a filename e.g: "My-filename_1.ext".
+`en\|nl\|fr`      | `{lang:en\|nl\|fr}`      | Matches 'en' or 'nl' or 'fr'.
 
 ---
 
