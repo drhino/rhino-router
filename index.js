@@ -81,11 +81,11 @@ const _parse = (pattern) =>
     // Only build the regex when the route has a dynamic pattern.
     if (pattern.includes('{')) {
 
-        const matchAll = pattern.matchAll(/\{([^:}]*)(?::([^}]*))?\}/g)
+        const expression = /{([^:}]+)(?::(.*?(?![^/:]*{[^:]*}})}?))?}/g
         // ...skips whitespace, tabs & line breaks:
         // /\{\s*([^:}]*)\s*(?::\s*([^}]*))?\}/g
 
-        for (const match of matchAll) {
+        for (const match of pattern.matchAll(expression) ) {
             // Uses the regex pattern in a capturing group.
             // {varName:[0-9]+} -> ([0-9]+)
             const rgx = '(' + (match[2] || DEFAULT_RGX) + ')'
