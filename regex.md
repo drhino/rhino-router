@@ -21,6 +21,10 @@ Regex             | Example                   | Info
 `(?:en\|nl)`      | `{lang:(?:en\|nl)}`       | Same as above.
 `en\|nl\|fr`      | `{lang:en\|nl\|fr}`       | Matches 'en' or 'nl' or 'fr'.
 
+Example                                                                                        | Info
+-----------------------------------------------------------------------------------------------|-------
+`{uuidv4:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}}`| [RFC4122](https://datatracker.ietf.org/doc/html/rfc4122#page-4)
+
 ---
 
 ### ASCII table
