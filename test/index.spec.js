@@ -7,7 +7,7 @@ const routes = [
     '/fixed/route/pattern',
     // { key [:regex] }
     '/blog/{category}/{article:[-0-9A-Za-z]+}',
-    '/flight/{from:[^-]+}-{to}',
+    '/flight/{from:[^-]+}-{to}/{uuidv4:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}}',
     '/{lang:en|nl}',
     '/prefix/{route:.*}/suffix',
 ]
@@ -30,7 +30,8 @@ const shouldWork = [
     { route: '/fixed/route/pattern', vars: {} },
     { route: '/blog/my-category/my-article', 
         vars: { category: 'my-category', article: 'my-article' } },
-    { route: '/flight/LAX-BRU', vars: { from: 'LAX', to: 'BRU' } },
+    { route: '/flight/LAX-BRU/31013ab7-0156-4bcb-84c4-d72da082a7bc', 
+        vars: { from: 'LAX', to: 'BRU', uuidv4: '31013ab7-0156-4bcb-84c4-d72da082a7bc' } },
     { route: '/nl', vars: { lang: 'nl' } },
     { route: '/prefix/complete/path/suffix', vars: { route: 'complete/path' } }
 ]
