@@ -22,21 +22,27 @@ yarn add rhino-router
 
 ### Defining routes
 
-Dynamic patterns use the syntax: `{myVar}` or `{myVar:regex}`
+Dynamic route patterns use the syntax: `{myVar}` or `{myVar:regex}`
 
 ```javascript
 import { add, dispatch } from 'rhino-router'
 
 add({
+  // The route key is required.
   route: '/blog/{category}/{article}',
+  
+  // Optionally, add HTTP methods.
+  // methods: ['GET'],
     
-  // Add anything you want.
+  // Add anything else you want.
   something: 'custom handler or attributes'
+  // ...
 })
 
 add({
   // {id} must be a number.
-  route: '/product/{id:[0-9]+}'
+  route: '/product/{id:[0-9]+}',
+  methods: ['GET', 'POST']
 })
 
 const result = dispatch('/product/99')
@@ -47,13 +53,15 @@ By default the `route` key uses a syntax where `{foo}` specifies a placeholder w
 This means that `{foo}` is exactly the same as `{foo:[^/]+}`.
 Please note that the colon `:` is not part of the regex.
 
+The `methods` key is optional and defaults to `[GET, HEAD]`. When explicitly defining `GET` you SHOULD also add a `HEAD`.
+
 ---
 
 ### Matching routes
 
-The method `dispatch(pathname)` returns an `Object` or `FALSE` when no matching route is found.
-
 The method `dispatch(pathname)` returns an `Object`. When no match is found, a `NotFoundException` is thrown.
+
+`dispatch(pathname, httpMethod)` can also throw a `MethodNotAllowedException`.
 
 example:
 ```javascript
@@ -78,12 +86,44 @@ returns:
 }
 ```
 
-returns `FALSE`:
+throws `NotFoundException`:
 ```javascript
-// route: '/product/{id:[0-9]+}'
-const result = dispatch('/product/Not-A-Number')
+try {
+    // route: '/product/{id:[0-9]+}'
+    const result = dispatch('/product/Not-A-Number')
+}
+catch (exception) {
 
-// Placeholder: "id" with value: "Not-A-Number" is not a number.
+    if (exception.name === 'NotFoundException') {
+        // ...
+    }
+    else {
+        // Re-throw other exceptions.
+        throw exception
+    }
+}
+```
+
+throws `MethodNotAllowedException`:
+```javascript
+try {
+    // route: '/blog/{category}/{article}'
+    const result = dispatch('/blog/my-category/my-article', 'DELETE')
+}
+catch (exception) {
+
+    if (exception.name === 'MethodNotAllowedException') {
+
+        const header = {
+          'Allow': exception.allowedMethods.join(', ')
+        }
+        
+        // ...
+    }
+    else {
+        throw exception
+    }
+}
 ```
 
 ---
@@ -106,6 +146,7 @@ Regex             | Example                  | Info
 ## Examples
 - [Browser module](https://github.com/drhino/rhino-router/blob/main/examples/browser.html)
 - [Frontend router](https://github.com/drhino/rhino-router/tree/main/examples/frontend)
+- Cloudflare Workers
 
 ---
 
